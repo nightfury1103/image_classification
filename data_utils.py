@@ -47,7 +47,7 @@ class INTELDataset:
         self.train_df = pd.read_csv(DATA_DIR['INTEL']['train'], index_col=0)
         self.test_df = pd.read_csv(DATA_DIR['INTEL']['test'], index_col=0)
 
-        train_idx, valid_idx = train_test_split(range(len(self.train_df)), test_size=0.3, random_state=42)      
+        train_idx, valid_idx = train_test_split(range(len(self.train_df)), test_size=0.2, random_state=42)      
         
         self.train = ImageDataset(self.train_df, train_idx)
         self.valid = ImageDataset(self.train_df, valid_idx)
