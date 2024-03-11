@@ -12,6 +12,7 @@ from sklearn.preprocessing import LabelEncoder
 from PIL import Image
 import tqdm
 from sklearn.model_selection import train_test_split
+from torch.nn.utils.rnn import pad_sequence
 
 curr_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(curr_dir)
@@ -34,7 +35,10 @@ print(f"Vocabulary size, including special tokens: {vocab_size}")
 best_valid_loss = float('inf')
 
 # # Model, Loss, and Optimizer
-model = MultiTaskModel(num_classes=6, vocab_size=vocab_size)
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'Using device: {device}')
+
+model = MultiTaskModel(num_classes=6, vocab_size=vocab_size).to(device)
 criterion_class = nn.CrossEntropyLoss()
 criterion_desc = nn.CrossEntropyLoss()  # For simplicity, adjust for sequence generation
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
@@ -45,23 +49,12 @@ for epoch in range(num_epochs):
     model.train()
     train_loss = 0
     for images, labels, captions in tqdm.tqdm(train_dataloader):
+        images, labels = images.to(device), labels.to(device)
         optimizer.zero_grad()
 
-            # Process all captions in the batch
-        caption_indices_list = []
-        for caption in captions:
-            tokens = caption.split()
-            token_indices = [vocab.get(token, vocab['<unk>']) for token in tokens]
-            caption_indices_list.append(token_indices)
-        
-        # Pad the sequences to have the same length
-        caption_lengths = [len(indices) for indices in caption_indices_list]
-        max_length = max(caption_lengths)
-        padded_caption_indices = [indices + [vocab['<pad>']] * (max_length - len(indices)) for indices in caption_indices_list]
+        tokenized_captions = [torch.tensor([vocab.get(token, vocab['<unk>']) for token in caption.split()], dtype=torch.long).to(device) for caption in captions]
+        caption_indices_tensor = pad_sequence(tokenized_captions, batch_first=True, padding_value=vocab['<pad>'])
 
-        # Convert the padded caption indices into a tensor
-        caption_indices_tensor = torch.tensor(padded_caption_indices, dtype=torch.long)
-        
         class_logits, description_logits = model(images, caption_indices_tensor)
         
         loss_class = criterion_class(class_logits, labels)
@@ -80,10 +73,11 @@ for epoch in range(num_epochs):
     total_preds = 0
     with torch.no_grad():
         for images, labels, captions in valid_dataloader:
+            images, labels = images.to(device), labels.to(device)
+            
             # Prepare validation captions
-            tokens = captions[0].split()  # Assuming a batch size of 1 for simplicity
-            token_indices = [vocab.get(token, vocab['<unk>']) for token in tokens]
-            caption_indices_tensor = torch.tensor(token_indices, dtype=torch.long).unsqueeze(0)
+            tokenized_captions = [torch.tensor([vocab.get(token, vocab['<unk>']) for token in caption.split()], dtype=torch.long).to(device) for caption in captions]
+            caption_indices_tensor = pad_sequence(tokenized_captions, batch_first=True, padding_value=vocab['<pad>'])
             
             class_logits, description_logits = model(images, caption_indices_tensor)
             
@@ -110,32 +104,33 @@ for epoch in range(num_epochs):
         best_valid_loss = valid_loss
         torch.save(model.state_dict(), 'best_model.pth')
         
-# # # Test the model
-# model.load_state_dict(torch.load('/home/huy/Desktop/HCMUS/image_classification/models/best_model.pth'))
-# model.eval()
-# test_loss = 0
-# correct_preds = 0
-# total_preds = 0
-# with torch.no_grad():
-#     for images, labels, captions in test_dataloader:
-#         # Prepare test captions
-#         tokens = captions[0].split()  # Assuming a batch size of 1 for simplicity
-#         token_indices = [vocab.get(token, vocab['<unk>']) for token in tokens]
-#         caption_indices_tensor = torch.tensor(token_indices, dtype=torch.long).unsqueeze(0)
+# # Test the model
+model.load_state_dict(torch.load('best_model.pth'))
+model.eval()
+test_loss = 0
+correct_preds = 0
+total_preds = 0
+with torch.no_grad():
+    for images, labels, captions in test_dataloader:
+        # Prepare test captions
+        images, labels = images.to(device), labels.to(device)
         
-#         class_logits, description_logits = model(images, caption_indices_tensor)
+        tokenized_captions = [torch.tensor([vocab.get(token, vocab['<unk>']) for token in caption.split()], dtype=torch.long).to(device) for caption in captions]
+        caption_indices_tensor = pad_sequence(tokenized_captions, batch_first=True, padding_value=vocab['<pad>'])
         
-#         loss_class = criterion_class(class_logits, labels)
-#         loss_desc = criterion_desc(description_logits.view(-1, vocab_size), caption_indices_tensor.view(-1))
+        class_logits, description_logits = model(images, caption_indices_tensor)
         
-#         loss = loss_class + 0.5 * loss_desc
-#         test_loss += loss.item()
+        loss_class = criterion_class(class_logits, labels)
+        loss_desc = criterion_desc(description_logits.view(-1, vocab_size), caption_indices_tensor.view(-1))
         
-#         # Calculate accuracy
-#         _, predicted_labels = torch.max(class_logits, 1)
-#         correct_preds += (predicted_labels == labels).sum().item()
-#         total_preds += labels.size(0)
+        loss = loss_class + 0.5 * loss_desc
+        test_loss += loss.item()
+        
+        # Calculate accuracy
+        _, predicted_labels = torch.max(class_logits, 1)
+        correct_preds += (predicted_labels == labels).sum().item()
+        total_preds += labels.size(0)
 
-# test_loss /= len(test_dataloader)
-# test_acc = correct_preds / total_preds
-# print(f'Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.4f}')
+test_loss /= len(test_dataloader)
+test_acc = correct_preds / total_preds
+print(f'Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.4f}')
