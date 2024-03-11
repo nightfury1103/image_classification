@@ -5,7 +5,7 @@ ALPHA = os.getenv('alpha', None)
 DATA_DIR = {
     'INTEL':
     {
-        'train': 'datasets/INTEL/seg_train/seg_train/trained.csv',
+        'train': 'datasets/INTEL/trained.csv',
         'test': 'datasets/INTEL/seg_test'
     },
     'CIFAR':
