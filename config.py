@@ -6,7 +6,7 @@ DATA_DIR = {
     'INTEL':
     {
         'train': 'datasets/INTEL/trained.csv',
-        'test': 'datasets/INTEL/seg_test'
+        'test': 'datasets/INTEL/test.csv'
     },
     'CIFAR':
     {

@@ -14,7 +14,7 @@ class APICollector:
             api_key="AIzaSyDG_BXLX52SyTRw31yUHHwJolymVqkc7PQ",
             provider=GeminiPro
         )
-        self.name_datasets = name_datasets + "/" + name_datasets
+        self.name_datasets = "datasets/INTEL/" + name_datasets + "/" + name_datasets
         self.prompt = "Given an image, describe the scene in the image. And what is the main object in the image among the following categories: (A) buildings, (B) forest, (C) glacier, (D) mountain, (E) sea, (F) street. Answer it after character '(A)', '(B)', '(C)', '(D)', '(E)', '(F)'."
         
     def call_api(self, path):
@@ -31,7 +31,7 @@ class APICollector:
                 res = np.nan
 
             print(res)
-            time.sleep(5)
+            # time.sleep(5)
         return response.choices[0].message.content
         
     def load_datasets(self):
@@ -50,15 +50,15 @@ class APICollector:
             'image': images
         })
         df['description'] = np.nan          
-        self.df = df
+        self.df = df.sample(frac=1).reset_index(drop=True)
     
     def load_remain(self):
-        df = pd.read_csv('/home/huy/Desktop/HCMUS/image_classification/remain.csv', index_col=0)
+        df = pd.read_csv('/home/huy/Desktop/HCMUS/image_classification/description_data/INTEL/test/describe_1.csv', index_col=0)
         self.df = df[df.description.isna()]
     
     def get_describe(self):
         # cal multiprocess to get description
-        num_cores = 1
+        num_cores = 15
         with ThreadPoolExecutor(max_workers=num_cores) as executor:
             futures = []
             index_to_path_map = {}
@@ -82,10 +82,10 @@ class APICollector:
         return self.df
     
 if __name__ == "__main__":
-    name_datasets = "seg_train"
+    name_datasets = "seg_test"
     api = APICollector(name_datasets)
     df = api.run()
-    df.to_csv(f"{name_datasets}_describe_error7.csv", index=True)
+    df.to_csv(f"/home/huy/Desktop/HCMUS/image_classification/description_data/INTEL/test/describe_2.csv", index=True)
     
         
     

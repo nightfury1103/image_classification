@@ -14,8 +14,11 @@ sys.path.append(os.path.join(curr_dir, '../'))
 from config import DATA_DIR
 
 class ImageDataset(Dataset):
-    def __init__(self, dataframe, indices):
-        self.dataframe = dataframe.iloc[indices].reset_index(drop=True)
+    def __init__(self, dataframe, indices=None):
+        if indices:
+            self.dataframe = dataframe.iloc[indices].reset_index(drop=True)
+        else:
+            self.dataframe = dataframe
         self.transform = Compose([
                 Resize((224, 224)),
                 ToTensor(),
@@ -42,13 +45,13 @@ class ImageDataset(Dataset):
 class INTELDataset:
     def __init__(self, batch_size=32):
         self.train_df = pd.read_csv(DATA_DIR['INTEL']['train'], index_col=0)
-    
-        train_idx, temp_idx = train_test_split(range(len(self.train_df)), test_size=0.3, random_state=42)
-        valid_idx, test_idx = train_test_split(temp_idx, test_size=0.5, random_state=42)       
+        self.test_df = pd.read_csv(DATA_DIR['INTEL']['test'], index_col=0)
+
+        train_idx, valid_idx = train_test_split(range(len(self.train_df)), test_size=0.3, random_state=42)      
         
         self.train = ImageDataset(self.train_df, train_idx)
         self.valid = ImageDataset(self.train_df, valid_idx)
-        self.test = ImageDataset(self.train_df, test_idx)
+        self.test = ImageDataset(self.test_df)
         
         self.batch_size = batch_size
         
