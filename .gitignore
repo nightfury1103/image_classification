@@ -1,7 +1,6 @@
 /seg_train
 /seg_test
 /seg_pred
-archive.zip
 /datasets/INTEL/seg_test
 /datasets/INTEL/seg_pred
 /datasets/INTEL/seg_train
