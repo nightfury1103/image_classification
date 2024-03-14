@@ -35,7 +35,7 @@ class APICollector:
             # print(res)
             time.sleep(1)
             counter += 1
-            if counter > 3:
+            if counter > 5:
                 return res
         return response.choices[0].message.content
         
@@ -63,7 +63,7 @@ class APICollector:
     
     def get_describe(self):
         # cal multiprocess to get description
-        num_cores = 5
+        num_cores = 1
         with ThreadPoolExecutor(max_workers=num_cores) as executor:
             futures = []
             index_to_path_map = {}
@@ -82,7 +82,7 @@ class APICollector:
                 print(f"Updated index {index} with result: {res}")
             
     def run(self):
-        self.load_datasets()
+        self.load_remain()
         self.get_describe()
         return self.df
     
@@ -90,7 +90,7 @@ if __name__ == "__main__":
     name_datasets = "test"
     api = APICollector(name_datasets)
     df = api.run()
-    df.to_csv(f"/home/huy/Desktop/HCMUS/image_classification/description_data/CIFAR/test/describe_1.csv", index=True)
+    df.to_csv(f"/home/huy/Desktop/HCMUS/image_classification/description_data/CIFAR/test/describe_2.csv", index=True)
     
         
     
