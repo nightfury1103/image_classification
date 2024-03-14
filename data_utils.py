@@ -96,4 +96,4 @@ class CIFARDataset:
         self.train
         
         
-CIFARDataset()
+# CIFARDataset()
