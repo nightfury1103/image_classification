@@ -14,6 +14,8 @@ sys.path.append(os.path.join(curr_dir, '../'))
 
 from config import DATA_DIR
 
+torch.manual_seed(42)
+
 class ImageDataset(Dataset):
     def __init__(self, dataframe, indices=None):
         if indices:
