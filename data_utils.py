@@ -6,6 +6,7 @@ from PIL import Image
 from torchvision.transforms import Compose, Resize, ToTensor, Normalize
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from datasets import load_dataset
 
 curr_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(curr_dir)
@@ -88,3 +89,11 @@ class INTELDataset:
         vocab_size = len(vocab)
 
         return vocab, vocab_size
+    
+class CIFARDataset:
+    def __init__(self) -> None:
+        dataset = load_dataset("cifar10")
+        self.train
+        
+        
+CIFARDataset()

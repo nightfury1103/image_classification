@@ -25,6 +25,10 @@ train_dataloader = INTELDataset(batch_size=64).get_train_dataloader()
 valid_dataloader = INTELDataset(batch_size=64).get_valid_dataloader()
 test_dataloader = INTELDataset(batch_size=64).get_test_dataloader()
 
+print(f"Train size {train_dataloader.dataset.dataframe.shape}, accuracy {sum(train_dataloader.dataset.dataframe.llm_label == train_dataloader.dataset.dataframe.label) / len(train_dataloader.dataset.dataframe)}")
+print(f"Valid size {valid_dataloader.dataset.dataframe.shape}, accuracy {sum(valid_dataloader.dataset.dataframe.llm_label == valid_dataloader.dataset.dataframe.label) / len(valid_dataloader.dataset.dataframe)}")
+print(f"Test size {test_dataloader.dataset.dataframe.shape}, accuracy {sum(test_dataloader.dataset.dataframe.llm_label == test_dataloader.dataset.dataframe.label) / len(test_dataloader.dataset.dataframe)}")
+
 vocab, vocab_size = INTELDataset().get_vocab()
 
 # Printing vocab_size to verify

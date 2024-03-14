@@ -4,5 +4,8 @@
 /datasets/INTEL/seg_test
 /datasets/INTEL/seg_pred
 /datasets/INTEL/seg_train
+/datasets/CIFAR/train 
+/datasets/CIFAR/test
 /description_data
 /models
+/datasets/CIFAR/archive.zip
