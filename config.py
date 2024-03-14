@@ -10,7 +10,7 @@ DATA_DIR = {
     },
     'CIFAR':
     {
-        'train': 'datasets/CIFAR/train',
-        'test': 'datasets/CIFAR/test'
+        'train': 'datasets/CIFAR/trained.csv',
+        'test': 'datasets/CIFAR/tested.csv'
     }
 }

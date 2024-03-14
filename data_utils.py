@@ -46,9 +46,9 @@ class ImageDataset(Dataset):
         return image, label, description
     
 class INTELDataset:
-    def __init__(self, batch_size=32):
-        self.train_df = pd.read_csv(DATA_DIR['INTEL']['train'], index_col=0)
-        self.test_df = pd.read_csv(DATA_DIR['INTEL']['test'], index_col=0)
+    def __init__(self, batch_size=32, dataset_name='INTEL'):
+        self.train_df = pd.read_csv(DATA_DIR[dataset_name]['train'], index_col=0)
+        self.test_df = pd.read_csv(DATA_DIR[dataset_name]['test'], index_col=0)
 
         train_idx, valid_idx = train_test_split(range(len(self.train_df)), test_size=0.2, random_state=42)      
         
@@ -92,10 +92,9 @@ class INTELDataset:
 
         return vocab, vocab_size
     
-class CIFARDataset:
-    def __init__(self) -> None:
-        dataset = load_dataset("cifar10")
-        self.train
+class CIFARDataset(INTELDataset):
+    def __init__(self, batch_size=32, dataset_name='CIFAR'):
+        super().__init__(batch_size, dataset_name)
         
         
 # CIFARDataset()

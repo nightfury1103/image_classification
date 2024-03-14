@@ -31,18 +31,18 @@ curr_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(curr_dir)
 sys.path.append(os.path.join(curr_dir, '../'))
 
-from data_utils import INTELDataset
+from data_utils import INTELDataset, CIFARDataset
 from model_utils import MultiTaskModel
 
-train_dataloader = INTELDataset(batch_size=32).get_train_dataloader()
-valid_dataloader = INTELDataset(batch_size=32).get_valid_dataloader()
-test_dataloader = INTELDataset(batch_size=32).get_test_dataloader()
+train_dataloader = CIFARDataset(batch_size=32).get_train_dataloader()
+valid_dataloader = CIFARDataset(batch_size=32).get_valid_dataloader()
+test_dataloader = CIFARDataset(batch_size=32).get_test_dataloader()
 
 print(f"Train size {train_dataloader.dataset.dataframe.shape}, accuracy {sum(train_dataloader.dataset.dataframe.llm_label == train_dataloader.dataset.dataframe.label) / len(train_dataloader.dataset.dataframe)}")
 print(f"Valid size {valid_dataloader.dataset.dataframe.shape}, accuracy {sum(valid_dataloader.dataset.dataframe.llm_label == valid_dataloader.dataset.dataframe.label) / len(valid_dataloader.dataset.dataframe)}")
 print(f"Test size {test_dataloader.dataset.dataframe.shape}, accuracy {sum(test_dataloader.dataset.dataframe.llm_label == test_dataloader.dataset.dataframe.label) / len(test_dataloader.dataset.dataframe)}")
 
-vocab, vocab_size = INTELDataset().get_vocab()
+vocab, vocab_size = CIFARDataset().get_vocab()
 
 # Printing vocab_size to verify
 print(f"Vocabulary size, including special tokens: {vocab_size}")
