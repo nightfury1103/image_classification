@@ -60,7 +60,7 @@ criterion_class = nn.CrossEntropyLoss()
 criterion_desc = nn.CrossEntropyLoss()  # For simplicity, adjust for sequence generation
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-num_epochs = 1  # Specify the number of epochs
+num_epochs = 20  # Specify the number of epochs
 
 for epoch in range(num_epochs):
     model.train()
