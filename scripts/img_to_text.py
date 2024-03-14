@@ -1,8 +1,19 @@
 import os, sys
 import torch
+import numpy as np
+import random
 import torch.nn as nn
 
-torch.manual_seed(42)
+# Set seeds for reproducibility
+seed = 42
+torch.manual_seed(seed)
+np.random.seed(seed)
+random.seed(seed)
+
+# Ensure deterministic behavior in CuDNN (if using CUDA)
+if torch.backends.cudnn.enabled:
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 from torch.utils.data import DataLoader
 import pandas as pd
