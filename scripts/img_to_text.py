@@ -23,9 +23,9 @@ sys.path.append(os.path.join(curr_dir, '../'))
 from data_utils import INTELDataset
 from model_utils import MultiTaskModel
 
-train_dataloader = INTELDataset(batch_size=64).get_train_dataloader()
-valid_dataloader = INTELDataset(batch_size=64).get_valid_dataloader()
-test_dataloader = INTELDataset(batch_size=64).get_test_dataloader()
+train_dataloader = INTELDataset(batch_size=32).get_train_dataloader()
+valid_dataloader = INTELDataset(batch_size=32).get_valid_dataloader()
+test_dataloader = INTELDataset(batch_size=32).get_test_dataloader()
 
 print(f"Train size {train_dataloader.dataset.dataframe.shape}, accuracy {sum(train_dataloader.dataset.dataframe.llm_label == train_dataloader.dataset.dataframe.label) / len(train_dataloader.dataset.dataframe)}")
 print(f"Valid size {valid_dataloader.dataset.dataframe.shape}, accuracy {sum(valid_dataloader.dataset.dataframe.llm_label == valid_dataloader.dataset.dataframe.label) / len(valid_dataloader.dataset.dataframe)}")
@@ -49,7 +49,7 @@ criterion_class = nn.CrossEntropyLoss()
 criterion_desc = nn.CrossEntropyLoss()  # For simplicity, adjust for sequence generation
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-num_epochs = 20  # Specify the number of epochs
+num_epochs = 1  # Specify the number of epochs
 
 for epoch in range(num_epochs):
     model.train()
