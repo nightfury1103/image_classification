@@ -55,7 +55,7 @@ best_valid_loss = float('inf')
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f'Using device: {device}')
 
-model = MultiTaskModel(num_classes=6, vocab_size=vocab_size).to(device)
+model = MultiTaskModel(num_classes=10, vocab_size=vocab_size).to(device)
 criterion_class = nn.CrossEntropyLoss()
 criterion_desc = nn.CrossEntropyLoss()  # For simplicity, adjust for sequence generation
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
