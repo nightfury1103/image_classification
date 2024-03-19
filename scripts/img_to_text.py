@@ -50,6 +50,7 @@ print(f"Vocabulary size, including special tokens: {vocab_size}")
 
 
 best_valid_loss = float('inf')
+best_valid_acc = 0
 
 # # Model, Loss, and Optimizer
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -60,7 +61,7 @@ criterion_class = nn.CrossEntropyLoss()
 criterion_desc = nn.CrossEntropyLoss()  # For simplicity, adjust for sequence generation
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-num_epochs = 50  # Specify the number of epochs
+num_epochs = 20  # Specify the number of epochs
 
 for epoch in range(num_epochs):
     model.train()
@@ -119,10 +120,16 @@ for epoch in range(num_epochs):
     # Save model if it has the best validation loss
     if valid_loss < best_valid_loss:
         best_valid_loss = valid_loss
-        torch.save(model.state_dict(), 'best_model.pth')
+        torch.save(model.state_dict(), 'best_model_loss.pth')
+
+    # Save model if it has the best validation accuracy
+    if valid_acc > best_valid_acc:
+        best_valid_acc = valid_acc
+        torch.save(model.state_dict(), 'best_model_acc.pth')
+
         
 # # Test the model
-model.load_state_dict(torch.load('best_model.pth'))
+model.load_state_dict(torch.load('best_model_acc.pth'))
 model.eval()
 test_loss = 0
 correct_preds = 0

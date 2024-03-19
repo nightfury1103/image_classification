@@ -15,7 +15,7 @@ class APICollector:
             provider=GeminiPro
         )
         self.name_datasets = "datasets/INTEL/" + name_datasets + "/" + name_datasets
-        self.prompt = "Given an image, describe the scene in the image. And what is the main object in the image among the following categories: (A) buildings, (B) forest, (C) glacier, (D) mountain, (E) sea, (F) street. Answer it after character '(A)', '(B)', '(C)', '(D)', '(E)', '(F)'."
+        self.prompt = "Given an X-ray image, describe the scene in the image. And what is the main object in the image among the following categories: (A) NORMAL, (B) PNEUMONIA. Answer it after character '(A)', '(B)'."
         
     def call_api(self, path):
         res = np.nan
@@ -24,7 +24,7 @@ class APICollector:
                 response = self.client.chat.completions.create(
                     model="gemini-pro-vision",
                     messages=[{"role": "user", "content": self.prompt}],
-                    image=open(path, "rb")  
+                    image=open("/home/huy/Desktop/HCMUS/image_classification/PNEUMONIA_0.jpeg", "rb")  
                 )
                 res = response.choices[0].message.content
             except Exception as e:
@@ -77,7 +77,7 @@ class APICollector:
                 print(f"Updated index {index} with result: {res}")
             
     def run(self):
-        self.load_remain()
+        self.load_datasets()
         self.get_describe()
         return self.df
     
