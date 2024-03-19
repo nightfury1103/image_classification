@@ -1,38 +1,14 @@
 import os, sys
 import torch
-import numpy as np
-import random
-import torch.nn as nn
 
-# Set seeds for reproducibility
-seed = 42
-torch.manual_seed(seed)
-np.random.seed(seed)
-random.seed(seed)
-
-# Ensure deterministic behavior in CuDNN (if using CUDA)
-if torch.backends.cudnn.enabled:
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
-
-from torch.utils.data import DataLoader
-import pandas as pd
-from torch.utils.data import Dataset, DataLoader
-from torchvision.io import read_image
-from torchvision.transforms import Compose, Resize, ToTensor, Normalize
 import torch
-from sklearn.preprocessing import LabelEncoder
-from PIL import Image
 import tqdm
-from sklearn.model_selection import train_test_split
 from torch.nn.utils.rnn import pad_sequence
 
 curr_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(curr_dir)
 sys.path.append(os.path.join(curr_dir, '../'))
 
-from data_utils import INTELDataset, CIFARDataset
-from model_utils import MultiTaskModel
 from metrics import criterion_class, criterion_desc
 
 

@@ -6,6 +6,19 @@ from model_utils import MultiTaskModel
 from test_utils import get_model_performance
 from train_utils import trainer
 
+import random
+import torch.nn as nn
+import numpy as np
+# Set seeds for reproducibility
+seed = 42
+torch.manual_seed(seed)
+np.random.seed(seed)
+random.seed(seed)
+
+# Ensure deterministic behavior in CuDNN (if using CUDA)
+if torch.backends.cudnn.enabled:
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 def run(args):
     if args.dataset == 'INTEL':
