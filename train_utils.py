@@ -92,5 +92,6 @@ def trainer(num_epochs, alpha, model, train_dataloader, valid_dataloader, vocab,
             best_valid_acc = valid_acc
             torch.save(model.state_dict(), 'models/best_model_acc.pth')
 
-        
+    # Save the last epoch
+    torch.save(model.state_dict(), 'models/last_model.pth')
 

@@ -53,6 +53,8 @@ def run(args):
 
     get_model_performance(model=model, alpha=args.alpha, path='models/best_model_loss.pth', test_dataloader=test_dataloader, vocab=vocab, vocab_size=vocab_size, device=device, is_caption=args.is_caption)
     get_model_performance(model=model, alpha=args.alpha, path='models/best_model_acc.pth', test_dataloader=test_dataloader, vocab=vocab, vocab_size=vocab_size, device=device, is_caption=args.is_caption)
+    get_model_performance(model=model, alpha=args.alpha, path='models/last_model.pth', test_dataloader=test_dataloader, vocab=vocab, vocab_size=vocab_size, device=device, is_caption=args.is_caption)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
