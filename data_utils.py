@@ -57,6 +57,7 @@ class INTELDataset:
         self.test = ImageDataset(self.test_df)
         
         self.batch_size = batch_size
+        self.num_classes = len(self.train_df['llm_label'].unique())
         
     def get_train_dataloader(self, shuffle=True):
         return DataLoader(self.train, batch_size=self.batch_size, shuffle=shuffle)

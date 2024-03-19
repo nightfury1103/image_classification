@@ -7,5 +7,7 @@
 /datasets/CIFAR/train 
 /datasets/CIFAR/test
 /description_data
-/models
+/models/best_model.pth
+/models/best_model_acc.pth
+/models/best_model_loss.pth
 /datasets/CIFAR/archive.zip
