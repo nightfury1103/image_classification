@@ -57,17 +57,17 @@ def run(args):
 
 
 if __name__ == '__main__':
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument('--dataset', type=str, required=True)
-    # parser.add_argument('--batch_size', type=int, default=32)
-    # parser.add_argument('--epochs', type=int, default=10)
-    # parser.add_argument('--is_caption', type=bool, default=True)
-    # parser.add_argument('--alpha', type=float, default=0.5)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dataset', type=str, required=True)
+    parser.add_argument('--batch_size', type=int, default=32)
+    parser.add_argument('--epochs', type=int, default=10)
+    parser.add_argument('--is_caption', type=bool, default=True)
+    parser.add_argument('--alpha', type=float, default=0.5)
 
-    # args = parser.parse_args()
+    args = parser.parse_args()
 
-    dic = {'dataset': 'INTEL', 'batch_size': 64, 'epochs': 1, 'is_caption': True, 'alpha': 0.5}
-    from types import SimpleNamespace
-    args = SimpleNamespace(**dic)
+    # dic = {'dataset': 'INTEL', 'batch_size': 64, 'epochs': 1, 'is_caption': True, 'alpha': 0.5}
+    # from types import SimpleNamespace
+    # args = SimpleNamespace(**dic)
 
     run(args)
