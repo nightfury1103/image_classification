@@ -51,7 +51,7 @@ class MultiTaskModel(nn.Module):
         embeddings = self.word_embeddings(start_tokens)  # Get embeddings for start tokens
         
         descriptions = []
-        for _ in range(self.vocab_size):  # Sequence length
+        for _ in range(1000):  # Sequence length
             lstm_out, (h, c) = self.lstm(embeddings, (h, c))
             outputs = self.description_head(lstm_out.squeeze(1))
             descriptions.append(outputs)

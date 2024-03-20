@@ -66,7 +66,7 @@ if __name__ == '__main__':
 
     # args = parser.parse_args()
 
-    dic = {'dataset': 'INTEL', 'batch_size': 1, 'epochs': 1, 'is_caption': True, 'alpha': 0.5}
+    dic = {'dataset': 'INTEL', 'batch_size': 64, 'epochs': 1, 'is_caption': True, 'alpha': 0.5}
     from types import SimpleNamespace
     args = SimpleNamespace(**dic)
 
