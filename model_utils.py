@@ -36,7 +36,7 @@ class MultiTaskModel(nn.Module):
 
         self.start_token_index = vocab['<sos>']
 
-    def forward(self, images):
+    def forward(self, images, max_seq_length=20):
         features = self.backbone(images)
         class_logits = self.classification_head(features)
         
@@ -51,7 +51,7 @@ class MultiTaskModel(nn.Module):
         embeddings = self.word_embeddings(start_tokens)  # Get embeddings for start tokens
         
         descriptions = []
-        for _ in range(1000):  # Sequence length
+        for _ in range(max_seq_length):  # Sequence length
             lstm_out, (h, c) = self.lstm(embeddings, (h, c))
             outputs = self.description_head(lstm_out.squeeze(1))
             descriptions.append(outputs)
