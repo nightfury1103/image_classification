@@ -26,7 +26,7 @@ def trainer(num_epochs, alpha, model, train_dataloader, valid_dataloader, vocab,
             if is_caption:
                 tokenized_captions = [torch.tensor([vocab.get(token, vocab['<unk>']) for token in caption.split()], dtype=torch.long).to(device) for caption in captions]
                 caption_indices_tensor = pad_sequence(tokenized_captions, batch_first=True, padding_value=vocab['<pad>'])
-                max_seq_length = caption_indices_tensor.size(1)
+                max_seq_length = 1000
                 class_logits, description_logits = model(images, max_seq_length)
 
                 loss_class = criterion_class(class_logits, labels)
