@@ -40,7 +40,7 @@ def get_model_performance(alpha, model, path, test_dataloader, vocab, vocab_size
                     # Lengths match, no need to adjust
                     description_logits_padded = description_logits
 
-                loss_desc = criterion_desc(description_logits_padded.view(-1, vocab_size), caption_indices_tensor.view(-1))
+                loss_desc = criterion_desc(description_logits_padded.reshape(-1, vocab_size), caption_indices_tensor.view(-1))
 
                 loss = alpha * loss_class + (1 - alpha) * loss_desc
             else:

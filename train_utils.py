@@ -97,7 +97,7 @@ def trainer(num_epochs, alpha, model, train_dataloader, valid_dataloader, vocab,
                         # Lengths match, no need to adjust
                         description_logits_padded = description_logits
 
-                    loss_desc = criterion_desc(description_logits_padded.view(-1, vocab_size), caption_indices_tensor.view(-1))
+                    loss_desc = criterion_desc(description_logits_padded.reshape(-1, vocab_size), caption_indices_tensor.view(-1))
 
                     loss = alpha * loss_class + (1 - alpha) * loss_desc
                 else:
