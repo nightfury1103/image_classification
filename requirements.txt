@@ -13,7 +13,7 @@ async-property==0.2.2
 async-timeout==4.0.2
 asyncstdlib==3.12.0
 attrs==23.1.0
-beautifulsoup4==4.12.2
+zbeautifulsoup4==4.12.2
 bleach==6.1.0
 blinker==1.7.0
 blis==0.7.11
@@ -24,16 +24,23 @@ browser-cookie3==0.19.1
 bs4==0.0.1
 cachetools==5.3.2
 catalogue==2.0.10
+certifi @ file:///home/conda/feedstock_root/build_artifacts/certifi_1707022139797/work/certifi
+cffi @ file:///tmp/abs_98z5h56wf8/croots/recipe/cffi_1659598650955/work
 cfgv==3.4.0
+charset-normalizer @ file:///tmp/build/80754af9/charset-normalizer_1630003229654/work
 click==8.1.7
 cloudpathlib==0.16.0
 comm==0.2.0
 confection==0.1.4
 contexttimer==0.3.3
+contourpy @ file:///home/conda/feedstock_root/build_artifacts/contourpy_1699041363598/work
+cryptography @ file:///croot/cryptography_1689373676338/work
 curl-cffi==0.5.10
+cycler @ file:///home/conda/feedstock_root/build_artifacts/cycler_1696677705766/work
 cymem==2.0.8
 datasets==2.14.2
 debugpy==1.8.0
+decorator @ file:///home/conda/feedstock_root/build_artifacts/decorator_1641555617451/work
 decord==0.6.0
 dill==0.3.7
 distlib==0.3.8
@@ -65,6 +72,7 @@ httpcore==1.0.2
 httpx==0.26.0
 huggingface-hub==0.16.4
 identify==2.5.35
+idna @ file:///croot/idna_1666125576474/work
 imageio==2.34.0
 importlib-metadata==7.0.1
 iopath==0.1.10
@@ -74,6 +82,7 @@ itsdangerous==2.1.2
 jedi==0.19.1
 jeepney==0.8.0
 Jinja2==3.1.2
+joblib @ file:///home/conda/feedstock_root/build_artifacts/joblib_1691577114857/work
 Js2Py==0.74
 jsonschema==4.21.1
 jsonschema-specifications==2023.12.1
@@ -81,20 +90,28 @@ jupyter_client==8.6.0
 jupyter_core==5.5.1
 kaggle==1.6.6
 keras==2.15.0
+kiwisolver @ file:///home/conda/feedstock_root/build_artifacts/kiwisolver_1695379902431/work
 langcodes==3.3.0
+lazy_loader @ file:///home/conda/feedstock_root/build_artifacts/lazy_loader_1692295373316/work
 libclang==16.0.6
+librosa @ file:///home/conda/feedstock_root/build_artifacts/librosa_1692209066689/work
+linkedin-api @ git+https://github.com/tomquirk/linkedin-api.git@4d69958d1e31f9e5d962ef07712162e2dedaf440
+llvmlite @ file:///croot/llvmlite_1706910704562/work
 loguru==0.7.2
 lxml==5.1.0
 lz4==4.3.3
 Markdown==3.5.2
 markdown-it-py==3.0.0
 MarkupSafe==2.1.3
+matplotlib @ file:///home/conda/feedstock_root/build_artifacts/matplotlib-suite_1695076688068/work
 matplotlib-inline==0.1.6
 mdurl==0.1.2
 mkl-fft==1.3.1
+mkl-random @ file:///home/builder/ci_310/mkl_random_1641843545607/work
 mkl-service==2.4.0
 ml-dtypes==0.2.0
 mmh3==4.1.0
+msgpack @ file:///home/conda/feedstock_root/build_artifacts/msgpack-python_1700926504817/work
 multidict==6.0.4
 multiprocess==0.70.15
 munkres==1.1.4
@@ -102,6 +119,8 @@ murmurhash==1.0.10
 nest-asyncio==1.5.8
 networkx==3.2.1
 nodeenv==1.8.0
+numba @ file:///home/conda/feedstock_root/build_artifacts/numba_1707024805237/work
+numpy @ file:///croot/numpy_and_numpy_base_1682520569166/work
 oauthlib==3.2.2
 omegaconf==2.3.0
 openai==1.7.0
@@ -116,6 +135,7 @@ pexpect==4.9.0
 Pillow==9.4.0
 platformdirs==4.1.0
 plotly==5.19.0
+pooch @ file:///home/conda/feedstock_root/build_artifacts/pooch_1708448481555/work
 portalocker==2.8.2
 pre-commit==3.6.2
 preshed==3.0.9
@@ -130,6 +150,7 @@ pyasn1==0.5.1
 pyasn1-modules==0.3.0
 pycocoevalcap==1.2
 pycocotools==2.0.7
+pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
 pycryptodome==3.19.1
 pycryptodomex==3.19.1
 pydantic==2.5.3
@@ -138,7 +159,11 @@ pydeck==0.8.1b0
 PyExecJS==1.5.1
 Pygments==2.17.2
 pyjsparser==2.7.1
+pyOpenSSL @ file:///croot/pyopenssl_1690223430423/work
+pyparsing @ file:///home/conda/feedstock_root/build_artifacts/pyparsing_1690737849915/work
+PySocks @ file:///home/builder/ci_310/pysocks_1640793678128/work
 pytesseract==0.3.10
+python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/python-dateutil_1626286286081/work
 python-magic==0.4.27
 python-slugify==8.0.4
 pytz==2023.3
@@ -146,6 +171,7 @@ PyYAML==6.0.1
 pyzmq==25.1.2
 referencing==0.33.0
 regex==2023.6.3
+requests @ file:///croot/requests_1690400202158/work
 requests-oauthlib==1.3.1
 rich==13.7.0
 rpds-py==0.18.0
@@ -153,14 +179,18 @@ rsa==4.9
 safetensors==0.3.1
 salesforce-lavis==1.0.2
 scikit-image==0.22.0
+scikit-learn @ file:///home/conda/feedstock_root/build_artifacts/scikit-learn_1708073821019/work
 scipy==1.10.1
 selenium==4.16.0
 sentencepiece==0.1.99
+six @ file:///tmp/build/80754af9/six_1644875935023/work
 smart-open==6.4.0
 smmap==5.0.1
 sniffio==1.3.0
 sortedcontainers==2.4.0
+soundfile @ file:///home/conda/feedstock_root/build_artifacts/pysoundfile_1676571469739/work
 soupsieve==2.5
+soxr @ file:///home/conda/feedstock_root/build_artifacts/soxr-python_1696763381491/work
 spacy==3.7.4
 spacy-legacy==3.0.12
 spacy-loggers==1.0.5
@@ -178,6 +208,7 @@ termcolor==2.4.0
 tesseract==0.1.3
 text-unidecode==1.3
 thinc==8.2.3
+threadpoolctl @ file:///home/conda/feedstock_root/build_artifacts/threadpoolctl_1707930541534/work
 tifffile==2024.2.12
 timm==0.4.12
 tokenizers==0.13.3
@@ -193,9 +224,12 @@ transformers==4.26.1
 trio==0.24.0
 trio-websocket==0.11.1
 typer==0.9.0
+typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1702176139754/work
 tzdata==2023.3
 tzlocal==5.2
 undetected-chromedriver==3.5.4
+unicodedata2 @ file:///home/conda/feedstock_root/build_artifacts/unicodedata2_1695847980273/work
+urllib3 @ file:///croot/urllib3_1686163155763/work
 uvicorn==0.25.0
 validators==0.22.0
 virtualenv==20.25.1
