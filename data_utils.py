@@ -37,13 +37,14 @@ class ImageDataset(Dataset):
     def __getitem__(self, idx):
         img_path = self.dataframe['image'][idx]  # Assuming the first column is the image path
         image = Image.open(img_path)
-        label = torch.tensor(self.dataframe['truth_label_encoded'][idx])  # Assuming the second column is the label
+        # label = torch.tensor(self.dataframe['truth_label_encoded'][idx])  # Assuming the second column is the label
+        label = self.dataframe['llm_label'][idx]
         description = self.dataframe['description'][idx]  # Assuming the third column is the description
 
         if self.transform:
             image = self.transform(image)
 
-        return image, label, description
+        return img_path, label, description
     
 class INTELDataset:
     def __init__(self, batch_size=32, dataset_name='INTEL'):
