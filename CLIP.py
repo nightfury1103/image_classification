@@ -23,6 +23,7 @@ epochs = range(1)
 for image, label, caption in train_loader:
     image = Image.open(image[0])
     inputs = processor(image, label[0], return_tensors="pt")
+    inputs = {k: v.to(device) for k, v in inputs.items()}
     # inputs['labels'] = processor(text=caption[0], return_tensors="pt")["input_ids"]
 
     outputs = model(**inputs)
