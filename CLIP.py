@@ -14,7 +14,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
 print(f"Using device: {device}")
 
-batch_size = 8
+batch_size = 4
 train_loader = INTELDataset(batch_size=batch_size).get_train_dataloader()
 valid_loader = INTELDataset(batch_size=batch_size).get_valid_dataloader()
 optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
