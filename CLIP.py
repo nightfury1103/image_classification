@@ -108,7 +108,7 @@ for epoch in range(5):
                 batch_images.append(image)
 
             # Classification task
-            inputs = processor(images=batch_images, text=['predict: '] * batch_size, return_tensors="pt", padding=True, truncation=True)
+            inputs = processor(images=batch_images, text=['predict: '] * len(labels), return_tensors="pt", padding=True, truncation=True)
             encode_labels = processor(images=batch_images, text=list(labels), return_tensors="pt", padding=True, truncation=True)
 
             token_1 = inputs['input_ids']
@@ -124,7 +124,7 @@ for epoch in range(5):
             classification_loss = classification_output.loss
 
             # Captioning task
-            inputs = processor(images=batch_images, text=['describe: '] * batch_size, return_tensors="pt", padding=True, truncation=True, max_length=256)
+            inputs = processor(images=batch_images, text=['describe: '] * len(captions), return_tensors="pt", padding=True, truncation=True, max_length=256)
             encode_captions = processor(images=batch_images, text=list(captions), return_tensors="pt", padding=True, truncation=True)
 
             token_1 = inputs['input_ids']
