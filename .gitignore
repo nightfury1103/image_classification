@@ -11,3 +11,4 @@
 /models/best_model_acc.pth
 /models/best_model_loss.pth
 /datasets/CIFAR/archive.zip
+classification.pt
