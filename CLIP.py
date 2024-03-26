@@ -45,7 +45,7 @@ for epoch in range(5):
             batch_images.append(image)
             
         # Classification task
-        inputs = processor(images=batch_images, text=['predict: '] * batch_size, return_tensors="pt", padding=True, truncation=True)
+        inputs = processor(images=batch_images, text=['predict: '] * len(labels), return_tensors="pt", padding=True, truncation=True)
         encode_labels = processor(images=batch_images, text=list(labels), return_tensors="pt", padding=True, truncation=True)
 
         token_1 = inputs['input_ids']
@@ -161,7 +161,6 @@ for epoch in range(5):
         valid_acc = correct_preds / total_preds
 
         print(f'Epoch: {epoch+1}, Training Loss: {train_loss:.4f}, Validation Loss: {valid_loss:.4f}, Validation Acc: {valid_acc:.4f}')
-
 
 
 # Save the model's state_dict
