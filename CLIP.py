@@ -6,6 +6,7 @@ from tqdm import tqdm
 import numpy as np
 import random
 from metrics import tokenize_and_pad_texts
+import argparse
 
 seed = 42
 torch.manual_seed(seed)
@@ -27,86 +28,21 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
 print(f"Using device: {device}")
 
-batch_size = 4
-train_loader = INTELDataset(batch_size=batch_size).get_train_dataloader()
-valid_loader = INTELDataset(batch_size=batch_size).get_valid_dataloader()
-optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
+def run(batch_size=4, num_epochs=5, alpha=0.5):
+    train_loader = INTELDataset(batch_size=batch_size).get_train_dataloader()
+    valid_loader = INTELDataset(batch_size=batch_size).get_valid_dataloader()
+    optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)
 
-model.train()
+    model.train()
 
-alpha = 0.5
-
-train_loss = 0
-for epoch in range(5):
-    for i, (image_paths, labels, captions) in enumerate(tqdm(train_loader)):
-        batch_images = []
-        for image_path in image_paths:
-            image = Image.open(image_path).convert("RGB")
-            batch_images.append(image)
-            
-        # Classification task
-        inputs = processor(images=batch_images, text=['predict: '] * len(labels), return_tensors="pt", padding=True, truncation=True)
-        encode_labels = processor(images=batch_images, text=list(labels), return_tensors="pt", padding=True, truncation=True)
-
-        token_1 = inputs['input_ids']
-        token_2 = encode_labels['input_ids']
-        token_1, token_2 = tokenize_and_pad_texts(token_1, token_2)
-        
-        inputs["input_ids"] = token_1
-        inputs["labels"] = token_2
-        inputs = {k: v.to(device) for k, v in inputs.items()}
-
-        # Forward pass
-        classification_output = model(**inputs)
-        classification_loss = classification_output.loss
-        
-        # Captioning task
-        inputs = processor(images=batch_images, text=['describe: '] * len(captions), return_tensors="pt", padding=True, truncation=True, max_length=256)
-        encode_captions = processor(images=batch_images, text=list(captions), return_tensors="pt", padding=True, truncation=True)
-
-        token_1 = inputs['input_ids']
-        token_2 = encode_captions['input_ids']
-        token_1, token_2 = tokenize_and_pad_texts(token_1, token_2)
-
-        inputs["input_ids"] = token_1
-        inputs["labels"] = token_2
-        
-        sequence_length_diff = inputs["input_ids"].shape[1] - inputs["attention_mask"].shape[1]
-        if sequence_length_diff > 0:
-            # Apply padding to the sequence length dimension (the last dimension)
-            attention_mask_padded = torch.nn.functional.pad(inputs['attention_mask'], (0, sequence_length_diff), value=0)
-        
-        inputs['attention_mask'] = attention_mask_padded
-
-        inputs = {k: v.to(device) for k, v in inputs.items()}
-
-        # Forward pass
-        captioning_output = model(**inputs)
-        captioning_loss = captioning_output.loss
-
-        loss = alpha * classification_loss + (1 - alpha) * captioning_loss
-
-        # Backward and optimize
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-
-        if i % 100 == 0:
-            print(f"Epoch {epoch}, Iteration {i}, Loss: {loss.item()}")
-        train_loss += loss.item()
-
-    # Validation
-    model.eval()
-    valid_loss = 0
-    correct_preds = 0
-    total_preds = 0
-    with torch.no_grad():
-        for i, (image_paths, labels, captions) in enumerate(tqdm(valid_loader)):
+    train_loss = 0
+    for epoch in range(num_epochs):
+        for i, (image_paths, labels, captions) in enumerate(tqdm(train_loader)):
             batch_images = []
             for image_path in image_paths:
                 image = Image.open(image_path).convert("RGB")
                 batch_images.append(image)
-
+                
             # Classification task
             inputs = processor(images=batch_images, text=['predict: '] * len(labels), return_tensors="pt", padding=True, truncation=True)
             encode_labels = processor(images=batch_images, text=list(labels), return_tensors="pt", padding=True, truncation=True)
@@ -122,7 +58,7 @@ for epoch in range(5):
             # Forward pass
             classification_output = model(**inputs)
             classification_loss = classification_output.loss
-
+            
             # Captioning task
             inputs = processor(images=batch_images, text=['describe: '] * len(captions), return_tensors="pt", padding=True, truncation=True, max_length=256)
             encode_captions = processor(images=batch_images, text=list(captions), return_tensors="pt", padding=True, truncation=True)
@@ -149,19 +85,91 @@ for epoch in range(5):
 
             loss = alpha * classification_loss + (1 - alpha) * captioning_loss
 
-            valid_loss += loss.item()
-            # Calculate accuracy
-            predicted_labels = processor.batch_decode(torch.argmax(classification_output.decoder_logits, dim=-1), skip_special_tokens=True)
-            correct_preds += (np.array(predicted_labels) == np.array(labels)).sum().item()
-            total_preds += len(labels)
+            # Backward and optimize
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
-        # Average losses
-        train_loss /= len(train_loader)
-        valid_loss /= len(valid_loader)
-        valid_acc = correct_preds / total_preds
+            if i % 100 == 0:
+                print(f"Epoch {epoch}, Iteration {i}, Loss: {loss.item()}")
+            train_loss += loss.item()
 
-        print(f'Epoch: {epoch+1}, Training Loss: {train_loss:.4f}, Validation Loss: {valid_loss:.4f}, Validation Acc: {valid_acc:.4f}')
+        # Validation
+        model.eval()
+        valid_loss = 0
+        correct_preds = 0
+        total_preds = 0
+        with torch.no_grad():
+            for i, (image_paths, labels, captions) in enumerate(tqdm(valid_loader)):
+                batch_images = []
+                for image_path in image_paths:
+                    image = Image.open(image_path).convert("RGB")
+                    batch_images.append(image)
+
+                # Classification task
+                inputs = processor(images=batch_images, text=['predict: '] * len(labels), return_tensors="pt", padding=True, truncation=True)
+                encode_labels = processor(images=batch_images, text=list(labels), return_tensors="pt", padding=True, truncation=True)
+
+                token_1 = inputs['input_ids']
+                token_2 = encode_labels['input_ids']
+                token_1, token_2 = tokenize_and_pad_texts(token_1, token_2)
+                
+                inputs["input_ids"] = token_1
+                inputs["labels"] = token_2
+                inputs = {k: v.to(device) for k, v in inputs.items()}
+
+                # Forward pass
+                classification_output = model(**inputs)
+                classification_loss = classification_output.loss
+
+                # Captioning task
+                inputs = processor(images=batch_images, text=['describe: '] * len(captions), return_tensors="pt", padding=True, truncation=True, max_length=256)
+                encode_captions = processor(images=batch_images, text=list(captions), return_tensors="pt", padding=True, truncation=True)
+
+                token_1 = inputs['input_ids']
+                token_2 = encode_captions['input_ids']
+                token_1, token_2 = tokenize_and_pad_texts(token_1, token_2)
+
+                inputs["input_ids"] = token_1
+                inputs["labels"] = token_2
+                
+                sequence_length_diff = inputs["input_ids"].shape[1] - inputs["attention_mask"].shape[1]
+                if sequence_length_diff > 0:
+                    # Apply padding to the sequence length dimension (the last dimension)
+                    attention_mask_padded = torch.nn.functional.pad(inputs['attention_mask'], (0, sequence_length_diff), value=0)
+                
+                inputs['attention_mask'] = attention_mask_padded
+
+                inputs = {k: v.to(device) for k, v in inputs.items()}
+
+                # Forward pass
+                captioning_output = model(**inputs)
+                captioning_loss = captioning_output.loss
+
+                loss = alpha * classification_loss + (1 - alpha) * captioning_loss
+
+                valid_loss += loss.item()
+                # Calculate accuracy
+                predicted_labels = processor.batch_decode(torch.argmax(classification_output.decoder_logits, dim=-1), skip_special_tokens=True)
+                correct_preds += (np.array(predicted_labels) == np.array(labels)).sum().item()
+                total_preds += len(labels)
+
+            # Average losses
+            train_loss /= len(train_loader)
+            valid_loss /= len(valid_loader)
+            valid_acc = correct_preds / total_preds
+
+            print(f'Epoch: {epoch+1}, Training Loss: {train_loss:.4f}, Validation Loss: {valid_loss:.4f}, Validation Acc: {valid_acc:.4f}')
 
 
-# Save the model's state_dict
-torch.save(model.state_dict(), 'classify.pt')
+    # Save the model's state_dict
+    torch.save(model.state_dict(), 'classify.pt')
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--batch_size', type=int, default=4)
+    parser.add_argument('--num_epochs', type=int, default=10)
+    parser.add_argument('--alpha', type=float, default=0.5)
+
+    args = parser.parse_args()
+    run(args.batch_size, args.num_epochs, args.alpha)
