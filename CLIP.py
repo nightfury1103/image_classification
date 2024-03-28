@@ -20,8 +20,8 @@ if torch.backends.cudnn.enabled:
 
 
 # Initialize the processor and model
-processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
-model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base")
+processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-large")
+model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-large")
 
 # Check for GPU availability and move the model to the selected device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
